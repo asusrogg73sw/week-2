@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 
 type Card = {
@@ -73,9 +73,14 @@ const spring = { type: "spring", stiffness: 350, damping: 32 } as const;
 
 export default function Day2Page() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  // Jis card ne dialog khola, usko yaad rakhte hain taake band hone par focus wapas wahin aaye
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+
   const selected = cards.find((card) => card.id === selectedId) ?? null;
 
-  // Esc dabane par card band ho
+  const closeDialog = () => setSelectedId(null);
+
+  // Esc dabane par dialog band ho
   useEffect(() => {
     if (!selectedId) return;
 
@@ -87,47 +92,80 @@ export default function Day2Page() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [selectedId]);
 
+  // Scroll lock: dialog khula ho to background scroll band
+  useEffect(() => {
+    if (!selectedId) return;
+
+    const { body, documentElement } = document;
+    const previousOverflow = body.style.overflow;
+    const previousPaddingRight = body.style.paddingRight;
+    // Scrollbar ghayab hone par page ka content na hile
+    const scrollbarWidth = window.innerWidth - documentElement.clientWidth;
+
+    body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      body.style.overflow = previousOverflow;
+      body.style.paddingRight = previousPaddingRight;
+    };
+  }, [selectedId]);
+
+  // Focus return: dialog band hone par focus usi card par wapas
+  useEffect(() => {
+    if (selectedId !== null) return;
+    triggerRef.current?.focus();
+  }, [selectedId]);
+
   return (
     // reducedMotion="user": OS setting on ho to transform/layout animations band
     <MotionConfig reducedMotion="user">
-      <main className="mx-auto min-h-screen max-w-4xl p-6">
-        <header className="mb-6 space-y-1">
-          <h1 className="text-2xl font-bold">
-            Day 2: Shared Layout Transition
-          </h1>
-          <p className="text-sm text-neutral-500">
-            Kisi card par click karo. Esc ya bahar click se band karo.
-          </p>
-        </header>
+      <main className="mx-auto min-h-screen max-w-4xl p-4 sm:p-6">
+        {/* inert: dialog khula ho to background focus, click aur screen reader se hat jata hai */}
+        <div inert={selected !== null}>
+          <header className="mb-6 space-y-1">
+            <h1 className="text-2xl font-bold sm:text-3xl">
+              Day 2: Shared Layout Transition
+            </h1>
+            <p className="text-sm text-neutral-500">
+              Kisi card par click karo. Esc ya bahar click se band karo.
+            </p>
+          </header>
 
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {cards.map((card) => (
-            <li key={card.id}>
-              <motion.button
-                type="button"
-                layoutId={`card-${card.id}`}
-                onClick={() => setSelectedId(card.id)}
-                transition={spring}
-                style={{ borderRadius: 16 }}
-                className={`block w-full p-5 text-left text-white shadow-md ${card.color}`}
-              >
-                <motion.span
-                  layoutId={`tag-${card.id}`}
-                  className="block text-xs uppercase tracking-wide opacity-80"
+          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {cards.map((card) => (
+              <li key={card.id}>
+                <motion.button
+                  type="button"
+                  layoutId={`card-${card.id}`}
+                  onClick={(e) => {
+                    triggerRef.current = e.currentTarget;
+                    setSelectedId(card.id);
+                  }}
+                  transition={spring}
+                  style={{ borderRadius: 16 }}
+                  className={`block w-full p-5 text-left text-white shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${card.color}`}
                 >
-                  {card.tag}
-                </motion.span>
-                <motion.h2
-                  layoutId={`title-${card.id}`}
-                  className="mt-2 text-lg font-semibold"
-                >
-                  {card.title}
-                </motion.h2>
-                <p className="mt-1 text-sm opacity-90">{card.summary}</p>
-              </motion.button>
-            </li>
-          ))}
-        </ul>
+                  <motion.span
+                    layoutId={`tag-${card.id}`}
+                    className="block text-xs uppercase tracking-wide opacity-80"
+                  >
+                    {card.tag}
+                  </motion.span>
+                  <motion.h2
+                    layoutId={`title-${card.id}`}
+                    className="mt-2 text-lg font-semibold"
+                  >
+                    {card.title}
+                  </motion.h2>
+                  <p className="mt-1 text-sm opacity-90">{card.summary}</p>
+                </motion.button>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {/* Backdrop */}
         <AnimatePresence>
@@ -137,7 +175,7 @@ export default function Day2Page() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setSelectedId(null)}
+              onClick={closeDialog}
               className="fixed inset-0 z-40 bg-black/40"
             />
           )}
@@ -153,6 +191,7 @@ export default function Day2Page() {
               role="dialog"
               aria-modal="true"
               aria-labelledby={`dialog-title-${selected.id}`}
+              aria-describedby={`dialog-desc-${selected.id}`}
               style={{ borderRadius: 16 }}
               className={`fixed inset-0 z-50 m-auto h-fit w-[calc(100%-2rem)] max-w-md p-6 text-white shadow-2xl ${selected.color}`}
             >
@@ -170,6 +209,7 @@ export default function Day2Page() {
                 {selected.title}
               </motion.h2>
               <motion.p
+                id={`dialog-desc-${selected.id}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { delay: 0.15 } }}
                 exit={{ opacity: 0, transition: { duration: 0.1 } }}
@@ -180,7 +220,7 @@ export default function Day2Page() {
               <button
                 type="button"
                 autoFocus
-                onClick={() => setSelectedId(null)}
+                onClick={closeDialog}
                 className="mt-6 rounded-md bg-white/20 px-4 py-2 text-sm font-medium hover:bg-white/30 focus-visible:outline-2 focus-visible:outline-white"
               >
                 Band karo
