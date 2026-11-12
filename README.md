@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Motion Week 2: Layout Animations & Framer Motion Demo
 
-## Getting Started
+This repository contains practical implementations and demos exploring layout animations using **Motion** (formerly Framer Motion) in a Next.js App Router environment.
 
-First, run the development server:
+## 🚀 What's Covered in This Project
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Accordion Layout Animation (Size Change):**
+   - Implemented smooth expansion and collapsing using the `layout` prop.
+   - Handled text wrapping and container resizing seamlessly with spring physics (`stiffness: 400, damping: 35`).
+   - Used `AnimatePresence` with `mode="popLayout"` to prevent layout jumps during exit animations.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Sibling Layout Synchronization:**
+   - Applied `layout="position"` to adjacent sibling elements (like the lower section container) to ensure the entire page flows smoothly without sudden jumping or teleportation when an accordion opens or closes.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Grid Shuffle & Sort (Position Change):**
+   - Built a dynamic item grid supporting **Shuffle**, **Sort A-Z**, and **Reset** actions.
+   - Utilized individual `motion.li` elements with the `layout` prop so elements automatically animate to their new grid positions when reordered.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework:** Next.js (App Router, Client Components)
+- **Library:** `motion/react` (Framer Motion)
+- **Styling:** Tailwind CSS
+- **Language:** TypeScript
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📦 Getting Started Locally
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/asusrogg73sw/week-2.git](https://github.com/asusrogg73sw/week-2.git)
