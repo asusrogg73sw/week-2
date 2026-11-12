@@ -17,6 +17,7 @@ This repository contains practical implementations and demos exploring **Motion*
    - Card grid where a clicked card expands into a dialog using `layoutId`.
    - Heading and tag animate along with the card through their own `layoutId`.
    - Closes with Esc, backdrop click or the close button.
+   - While the dialog is open the background is `inert`, body scroll is locked, and focus returns to the card that opened it.
 
 4. **Accordion Layout Animation (Size Change):**
    - Implemented smooth expansion and collapsing using the `layout` prop.
@@ -68,12 +69,18 @@ This repository contains practical implementations and demos exploring **Motion*
 
 - Reduced motion is respected with `MotionConfig reducedMotion="user"` (and `useReducedMotion` on the Day 1 pages).
 - Toggle buttons use `aria-pressed` and `aria-expanded` where relevant.
+- The Day 2 dialog uses `role="dialog"`, `aria-modal`, `aria-labelledby` and `aria-describedby`. The background is made `inert` while it is open, scroll is locked (with scrollbar width compensation), and focus returns to the opening card when it closes.
+- Interactive elements have visible `focus-visible` outlines.
+
+## ✅ Quality Checks
+
+- `npm run build` completes successfully and prerenders all routes.
+- `npm run lint` reports no errors or warnings.
+- Manually tested at 375px, tablet and desktop widths: no horizontal scroll, no clipped text or buttons, and animations behave correctly.
 
 ## ⚠️ Known Limitations
 
-- The Day 2 dialog has `role="dialog"` but no focus trap, focus return or scroll lock yet.
-- The draggable card cannot be moved with the keyboard (a Reset button is provided).
-- Responsive polish across all pages is still in progress.
+- The draggable card on Day 3 cannot be moved with the keyboard (a Reset button is provided).
 
 ---
 
@@ -118,7 +125,7 @@ app/
       page.tsx                 Animated todo list
       wait/page.tsx            mode="wait" tabs demo
     day-2/
-      page.tsx                 layoutId card grid
+      page.tsx                 layoutId card grid and dialog
       layout-prop/page.tsx     layout prop demo
     day-3/page.tsx             Gesture demos
     filter-grid/page.tsx       Responsive filter grid
