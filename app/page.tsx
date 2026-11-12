@@ -15,16 +15,34 @@ const days: DayLink[] = [
     ready: true,
   },
   {
+    href: "/week-2/day-1/wait",
+    title: "Day 1 Extra: mode wait",
+    description: "Tabs ke saath wait, sync aur popLayout ka comparison.",
+    ready: true,
+  },
+  {
     href: "/week-2/day-2",
     title: "Day 2: Layout Animations & layoutId",
     description: "Card grid jo click par expand hota hai (shared layout transition).",
     ready: true,
   },
   {
+    href: "/week-2/day-2/layout-prop",
+    title: "Day 2 Extra: layout prop",
+    description: "Accordion aur shuffle/sort grid.",
+    ready: true,
+  },
+  {
     href: "/week-2/day-3",
     title: "Day 3: Gestures",
     description: "whileHover, whileTap, drag with constraints.",
-    ready: false,
+    ready: true,
+  },
+  {
+    href: "/week-2/filter-grid",
+    title: "Bonus: Filter Grid",
+    description: "Responsive grid with filter transitions.",
+    ready: true,
   },
 ];
 
@@ -44,7 +62,7 @@ export default function HomePage() {
             {day.ready ? (
               <Link
                 href={day.href}
-                className="block rounded-lg border p-4 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                className="block rounded-lg border p-4 transition-colors hover:bg-neutral-100"
               >
                 <h2 className="font-semibold">{day.title}</h2>
                 <p className="text-sm text-neutral-500">{day.description}</p>
