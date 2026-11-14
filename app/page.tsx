@@ -48,7 +48,7 @@ const days: DayLink[] = [
     href: "/week-2/day-5",
     title: "Day 5: Tailwind Responsive Polish",
     description: "375px se 1440px tak responsive layout.",
-    ready: false,
+    ready: true,
   },
   {
     href: "/week-2/filter-grid",
