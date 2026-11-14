@@ -39,10 +39,28 @@ const days: DayLink[] = [
     ready: true,
   },
   {
+    href: "/week-2/day-4",
+    title: "Day 4: Staggered Lists & Variants",
+    description: "staggerChildren, delayChildren, when beforeChildren, filter par re-stagger.",
+    ready: true,
+  },
+  {
+    href: "/week-2/day-5",
+    title: "Day 5: Tailwind Responsive Polish",
+    description: "375px se 1440px tak responsive layout.",
+    ready: false,
+  },
+  {
     href: "/week-2/filter-grid",
-    title: "Bonus: Filter Grid",
+    title: "Day 6: Filter Grid",
     description: "Responsive grid with filter transitions.",
     ready: true,
+  },
+  {
+    href: "/week-2/animated-card-grid",
+    title: "Day 7: Weekly Project",
+    description: "animated-card-grid: filter, layout, hover/tap gestures.",
+    ready: false,
   },
 ];
 
